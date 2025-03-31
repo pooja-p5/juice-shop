@@ -101,17 +101,18 @@ jobs:
         category: "/language:${{matrix.language}}"
 
 
-## Report generation 
-    - name: GitHub Advanced Security API to CSV
-      #if: ${{ matrix.language == 'java-kotlin' }}
-      uses: advanced-security/ghas-to-csv@8c2ad35efb234e8e1bd12efaced0f0609ad8afbb
-      env:
-        GITHUB_PAT: ${{ secrets.GH_API_PAT }}
-        GITHUB_REPORT_SCOPE: 'repository'
-        FEATURES: 'all' # valid values: codescanning,secretscanning,dependabot
-    - name: Upload Build Artifacts for GHAS
-      uses: actions/upload-artifact@v4
-      with:
-        name: ghas-data 
-        path: ${{ env.Work_Dir }}/*.csv
-        overwrite: true
+## Report generation jobs:
+  data_gathering:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CSV export
+        uses: advanced-security/ghas-to-csv@v3
+        env:
+          GITHUB_PAT: ${{ secrets.GH_API_PAT }}  # needed if not running against the current repository
+          SCOPE_NAME: "pooja-p5/juice-shop"  # repository name, needed only if not running against the current repository
+      - name: Upload CSV
+        uses: actions/upload-artifact@v4
+        with:
+          name: ghas-data
+          path: ${{ github.workspace }}/*.csv
+          if-no-files-found: error
