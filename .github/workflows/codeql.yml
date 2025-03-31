@@ -99,3 +99,19 @@ jobs:
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
+
+
+## Report generation 
+    - name: GitHub Advanced Security API to CSV
+      #if: ${{ matrix.language == 'java-kotlin' }}
+      uses: advanced-security/ghas-to-csv@8c2ad35efb234e8e1bd12efaced0f0609ad8afbb
+      env:
+        GITHUB_PAT: ${{ secrets.GH_API_PAT }}
+        GITHUB_REPORT_SCOPE: 'repository'
+        FEATURES: 'all' # valid values: codescanning,secretscanning,dependabot
+    - name: Upload Build Artifacts for GHAS
+      uses: actions/upload-artifact@v4
+      with:
+        name: ghas-data 
+        path: ${{ env.Work_Dir }}/*.csv
+        overwrite: true
