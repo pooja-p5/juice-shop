@@ -99,3 +99,29 @@ jobs:
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
+
+    - name: GitHub Advanced Security API to CSV
+      #if: ${{ matrix.language == 'java-kotlin' }}
+      uses: advanced-security/ghas-to-csv@8c2ad35efb234e8e1bd12efaced0f0609ad8afbb
+      env:
+        GITHUB_PAT: ${{ secrets.GH_API_PAT }}
+        GITHUB_REPORT_SCOPE: 'repository'
+        FEATURES: 'all' # valid values: codescanning,secretscanning,dependabot
+    - name: Upload Build Artifacts for GHAS
+      uses: actions/upload-artifact@v4
+      with:
+        name: ghas-data 
+        path: ${{ github.workspace }}/*.csv
+        overwrite: true
+    - name: Export Dependabot alerts
+      uses: ambilykk/dependabot-alert-export@v1.0
+      with:        
+          GITHUB_TOKEN: ${{secrets.GH_API_PAT}}
+          #org_name: 'ORG_NAME'
+          #repo_name: 'REPO_NAME'
+          csv_path: data/vulnerability.csv     
+    - name: Upload Vulnerability report
+      uses: actions/upload-artifact@v3
+      with:
+           name: vulnerability_report
+           path: data/vulnerability.csv      
