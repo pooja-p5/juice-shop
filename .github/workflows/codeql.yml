@@ -113,15 +113,15 @@ jobs:
         name: ghas-data 
         path: ${{ github.workspace }}/*.csv
         overwrite: true
-    - name: Export Dependabot alerts
-      uses: ambilykk/dependabot-alert-export@v1.0
-      with:        
-          GITHUB_TOKEN: ${{secrets.GH_API_PAT}}
-          #org_name: 'ORG_NAME'
-          #repo_name: 'REPO_NAME'
-          csv_path: data/vulnerability.csv     
-    - name: Upload Vulnerability report
-      uses: actions/upload-artifact@v3
-      with:
-           name: vulnerability_report
-           path: data/vulnerability.csv      
+#    - name: Export Dependabot alerts
+#      uses: ambilykk/dependabot-alert-export@v1.0
+#      with:        
+#          GITHUB_TOKEN: ${{secrets.GH_API_PAT}}
+#          #org_name: 'ORG_NAME'
+#          #repo_name: 'REPO_NAME'
+ #         csv_path: data/vulnerability.csv     
+ #   - name: Upload Vulnerability report
+ #     uses: actions/upload-artifact@v3
+ #     with:
+ #          name: vulnerability_report
+ #          path: data/vulnerability.csv      
