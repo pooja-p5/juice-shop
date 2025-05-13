@@ -1,0 +1,25 @@
+name: SBOM Generation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download SBOM Tool
+        run: |
+          curl -Lo $RUNNER_TEMP/sbom-tool https://github.com/microsoft/sbom-tool/releases/latest/download/sbom-tool-linux-x64
+          chmod +x $RUNNER_TEMP/sbom-tool
+
+      - name: Generate SBOM
+        run: |
+          $RUNNER_TEMP/sbom-tool generate -bc . -b ./config -pn MyProject -pv 1.0.0 -ps philips -nsb https://sbom.philips_juiceshop.com -V Verbose
+
+      - name: Upload SBOM Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: config
