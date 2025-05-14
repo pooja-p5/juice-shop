@@ -17,7 +17,7 @@ jobs:
 
       - name: Generate SBOM
         run: |
-          $RUNNER_TEMP/sbom-tool generate -bc . -b ./config -pn MyProject -pv 1.0.0 -ps philips -nsb https://sbom.philips_juiceshop.com -V Verbose
+          $RUNNER_TEMP/sbom-tool generate -b ./config -bc . -bc ./frontend  -pn MyProject -pv 1.0.0 -ps philips -nsb https://sbom.philips_juiceshop.com -V Verbose
 
       - name: Upload SBOM Artifact
         uses: actions/upload-artifact@v4
