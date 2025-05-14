@@ -4,21 +4,26 @@ on:
   workflow_dispatch:
 
 jobs:
-  generate-sbom:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Download SBOM Tool
-        run: |
-          curl -Lo $RUNNER_TEMP/sbom-tool https://github.com/microsoft/sbom-tool/releases/latest/download/sbom-tool-linux-x64
-          chmod +x $RUNNER_TEMP/sbom-tool
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+    #  - name: Build with Maven
+    #    run: mvn clean package
 
       - name: Generate SBOM
         run: |
-          $RUNNER_TEMP/sbom-tool generate -b ./config -bc . -pn MyProject -pv 1.0.0 -ps philips -nsb https://sbom.philips_juiceshop.com -V Verbose
-
+          curl -Lo $RUNNER_TEMP/sbom-tool https://github.com/microsoft/sbom-tool/releases/latest/download/sbom-tool-linux-x64
+          chmod +x $RUNNER_TEMP/sbom-tool
+          $RUNNER_TEMP/sbom-tool generate -b ./config -bc . -pn Webgoat -pv 1.0.0 -ps Philips_test -nsb https://sbom.philips.com -V Verbose
       - name: Upload SBOM Artifact
         uses: actions/upload-artifact@v4
         with:
