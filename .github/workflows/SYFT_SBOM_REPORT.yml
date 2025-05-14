@@ -1,0 +1,51 @@
+ame: SBOM Generation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+    #  - name: Build with Maven
+    #    run: mvn clean package
+
+      - name: Generate SBOM
+        run: |
+ame: SBOM Generation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+    #  - name: Build with Maven
+    #    run: mvn clean package
+
+    - name: Install Syft
+  run: |
+    curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+
+- name: Generate SBOM
+  run: |
+    syft dir:. -o cyclonedx-json > sbom.json
