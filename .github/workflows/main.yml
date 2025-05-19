@@ -6,18 +6,29 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]  # You can add multiple versions if you want to test compatibility
+
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Java
-        uses: actions/setup-java@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          node-version: ${{ matrix.node-version }}
 
-    #  - name: Build with Maven
-    #    run: mvn clean package
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run build
+        run: npm run build
+
+      # Optional: Run tests
+      - name: Run tests
+        run: npm test
+
 
       - name: Generate SBOM
         run: |
