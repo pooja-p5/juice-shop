@@ -2,7 +2,9 @@ name: "CodeQL Scan"
 
 on:
   push:
+     branches: [ "master", "pooja-p5-patch-1" ]
   pull_request:
+     branches: [ "master", "pooja-p5-patch-1" ]
 
 jobs:
   analyze:
