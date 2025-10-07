@@ -1,0 +1,23 @@
+name: Export SBOM from Dependency Graph
+
+on:
+  workflow_dispatch:
+
+jobs:
+  export-sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call GitHub API to export SBOM
+        run: |
+          curl -L \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.Report_token }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/dependency-graph/sbom \
+            -o sbom.spdx.json
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sbom
+          path: sbom.spdx.json
