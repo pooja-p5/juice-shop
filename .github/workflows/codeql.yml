@@ -13,9 +13,13 @@ name: "CodeQL Advanced"
 
 on:
   push:
-    branches: [ "master" ]
+    branches: 
+     - pooja-p5-patch-1
+     - master
   pull_request:
-    branches: [ "master" ]
+    branches: 
+     - pooja-p5-patch-1
+     - master
   schedule:
     - cron: '35 22 * * 3'
 
